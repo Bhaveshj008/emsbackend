@@ -3,20 +3,20 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Name is required'],
+    required: true,
     unique: true,
     trim: true
   },
   email: {
     type: String,
-    required: [true, 'Email is required'],
+    required: true,
     unique: true,
     lowercase: true,
     trim: true
   },
   password: {
     type: String,
-    required: [true, 'Password is required'],
+    required: true,
     select: false
   },
   role: {
@@ -30,11 +30,12 @@ const UserSchema = new mongoose.Schema({
     default: 'ACTIVE'
   }
 }, { 
-  timestamps: true 
+  timestamps: true,
+  autoIndex: true 
 });
 
-// Ensure unique indexes ignore documents with null or missing values
-UserSchema.index({ name: 1 }, { unique: true, partialFilterExpression: { name: { $exists: true, $ne: null } } });
-UserSchema.index({ email: 1 }, { unique: true, partialFilterExpression: { email: { $exists: true, $ne: null } } });
+// unique indexes
+UserSchema.index({ name: 1 }, { unique: true });
+UserSchema.index({ email: 1 }, { unique: true });
 
 module.exports = mongoose.model('User', UserSchema);
